@@ -1,0 +1,145 @@
+//package org.apache.iotdb.db.query.reader.series;
+
+//import org.apache.iotdb.tsfile.file.metadata.statistics.Ts2diffEncData;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class VersionDataResultSet {
+  private long startTimestamp, endTimestamp;
+  private int timelineEncSize;
+  private List<Integer> timestampBiasEnc = new ArrayList<>();
+  private List<Integer> timestampLenEnc = new ArrayList<>();
+  private List<Integer> timestampDeltaEnc = new ArrayList<>();
+  private List<Integer> version;
+  private List<Double> data; // temporary use double to hold all value;
+  private List<Double> preMax, preMin;
+  // private List<VersionedData> singlePoints; // not valuable for
+
+  public VersionDataResultSet() {}
+
+  public int timelineIntersection(
+      List<Ts2diffEncData> anotherTimeline, long anotherSTTime, boolean update) {
+    if (anotherSTTime > endTimestamp) return 0;
+    List<Integer> ans = new ArrayList<>();
+    int anotherSize = anotherTimeline.size();
+    // int count = 0;
+    int anotherSTBias = (int) (anotherSTTime + anotherTimeline.get(0).stBias - this.startTimestamp);
+    int currIndex = lower_bound(timestampBiasEnc, anotherSTBias, this.timelineEncSize);
+    System.out.println(currIndex);
+    // startFromIndex now >=0, O(N_enc)
+    int anotherId = 0;
+    while (anotherId < anotherSize && currIndex < this.timelineEncSize) {
+      Ts2diffEncData anotherEnc = anotherTimeline.get(anotherId);
+      // O(log(delta))
+      int gcdDelta = gcd(anotherEnc.delta, this.timestampDeltaEnc.get(currIndex));
+      System.out.println(gcdDelta);
+      anotherSTBias = (int) (anotherSTTime + anotherEnc.stBias - startTimestamp);
+      int stDiff = anotherSTBias - this.timestampBiasEnc.get(currIndex);
+      // int posDiff = (int) (stDiff/this.timestampDeltaEnc[startFromIndex]);
+      // stDiff >= 0
+
+      // ext-gcd ACM: gcd(A, B) = Ax+By
+      // stDiff + anotherEnc.delta* (x) = timestampDeltaEnc[currIndex]*(y);
+      // stDiff = anotherEnc.delta* (-x) + timestampDeltaEnc[currIndex]*(y);
+      if (stDiff % gcdDelta == 0) {
+        // int max_place = (stDiff < 0? (stDiff + Math.max(timestampDeltaEnc[currIndex],
+        // anotherEnc.delta))/gcdDelta: stDiff/gcdDelta);
+        // optimize potential: ext gcd
+        Set<Integer> ano = new HashSet<>();
+        if (anotherEnc.length < timestampLenEnc.get(currIndex)) {
+          for (int ix = 0; ix < anotherEnc.length; ix++) ano.add(stDiff + ix * anotherEnc.delta);
+          for (int ix = 0; ix < timestampLenEnc.get(currIndex); ix++)
+            if (ano.contains(ix * timestampDeltaEnc.get(currIndex)))
+              ans.add(ix * timestampDeltaEnc.get(currIndex) + timestampBiasEnc.get(currIndex));
+        } else {
+          for (int ix = 0; ix < timestampLenEnc.get(currIndex); ix++)
+            ano.add(ix * timestampDeltaEnc.get(currIndex));
+          for (int ix = 0; ix < anotherEnc.length; ix++)
+            if (ano.contains(stDiff + ix * anotherEnc.delta))
+              ans.add((stDiff + ix * anotherEnc.delta) + timestampBiasEnc.get(currIndex));
+        }
+      }
+      int currLastTimestamp =
+          timestampBiasEnc.get(currIndex)
+              + timestampDeltaEnc.get(currIndex) * timestampLenEnc.get(currIndex);
+      int anotherLastTimestamp = anotherSTBias + anotherEnc.delta * anotherEnc.length;
+      if (currLastTimestamp < anotherLastTimestamp) {
+        currIndex += 1;
+      } else {
+        anotherId += 1;
+      }
+    }
+    if (update) {
+      int prevDelta = ans.get(1) - ans.get(0), prevSz = 2, pos = 0;
+      List<Integer> bias = new ArrayList<>();
+      List<Integer> delta = new ArrayList<>();
+      List<Integer> len = new ArrayList<>();
+      bias.add(ans.get(0));
+      delta.add(prevDelta);
+      // timestampBiasEnc[0] = ans.get(0);
+      // timestampDeltaEnc.get(0) = prevDelta;
+      for (int ix = 2; ix < ans.size(); ix++) {
+        int nowDelta = ans.get(ix) - ans.get(ix - 1);
+        if (nowDelta == prevDelta) prevSz += 1;
+        else {
+          len.add(prevSz);
+          pos++;
+          bias.add(ans.get(ix));
+          delta.add(nowDelta);
+          prevDelta = nowDelta;
+        }
+      }
+    }
+    System.out.println(ans.size());
+    return ans.size();
+  }
+
+  private int lower_bound(List<Integer> source, int element, int sourceLen) {
+    if (source.get(0) > element) return -1;
+    if (source.get(sourceLen - 1) < element) return sourceLen - 1;
+    int pos = (int) (sourceLen / 2);
+    int lw = 0, uw = sourceLen - 1, lastPos = pos;
+    while (pos != lw) {
+      if (source.get(pos) > element) {
+        uw = pos;
+        pos = (int) ((lw + uw) / 2.0 + 0.5);
+      } else if (source.get(pos) == element) {
+        return pos;
+      } else {
+        lw = pos;
+        pos = (int) ((lw + uw) / 2.0 + 0.5);
+      }
+      if (pos == lastPos) return lw;
+      lastPos = pos;
+      // System.out.print(lw); System.out.print(pos); System.out.println(uw);
+    }
+    return lw;
+  }
+
+  private int gcd(int A, int B) {
+    return B == 0 ? A : gcd(B, A % B);
+  }
+
+  // private int ext_gcd(int A, int B, )
+
+  public static void main(String[] args) {
+    VersionDataResultSet vd = new VersionDataResultSet();
+    List<Ts2diffEncData> arr = new ArrayList<>();
+    arr.add(new Ts2diffEncData(1, 1, 5));
+    arr.add(new Ts2diffEncData(7, 2, 2));
+    vd.startTimestamp = 0;
+    vd.timelineEncSize = 1;
+    vd.endTimestamp = 11;
+    System.out.println(vd.timelineIntersection(arr, 1, true));
+
+    // System.out.println();
+  }
+
+  private class VersionedData {
+    public int timestampBias;
+    public double value;
+  }
+}
