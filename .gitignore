@@ -1,0 +1,7 @@
+*.csv
+*.txt
+*.log
+*.class
+/data/*
+/target/*
+

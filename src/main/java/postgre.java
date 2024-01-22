@@ -10,6 +10,9 @@ import java.util.Scanner;
 
 public class postgre {
 
+    private String longSchema = "(T bigint, s0 float,s1 float,s2 float,s3 float,s4 float,s5 float,s6 float,s7 float,s8 float,s9 float,s10 float,s11 float,s12 float,s13 float,s14 float,s15 float,s16 float,s17 float,s18 float,s19 float,s20 float,s21 float,s22 float,s23 float,s24 float,s25 float,s26 float,s27 float,s28 float,s29 float,s30 float,s31 float,s32 float,s33 float,s34 float,s35 float,s36 float,s37 float,s38 float,s39 float,s40 float,s41 float,s42 float,s43 float,s44 float,s45 float,s46 float,s47 float,s48 float,s49 float,s50 float,s51 float,s52 float,s53 float,s54 float,s55 float,s56 float,s57 float,s58 float,s59 float,s60 float,s61 float,s62 float,s63 float,s64 float,s65 float,s66 float,s67 float,s68 float,s69 float,s70 float,s71 float,s72 float,s73 float,s74 float,s75 float,s76 float,s77 float,s78 float,s79 float,s80 float,s81 float,s82 float,s83 float,s84 float,s85 float,s86 float,s87 float,s88 float,s89 float,s90 float,s91 float,s92 float,s93 float,s94 float,s95 float,s96 float,s97 float,s98 float,s99 float,s100 float,s101 float,s102 float,s103 float,s104 float,s105 float,s106 float,s107 float,s108 float,s109 float,s110 float,s111 float,s112 float,s113 float,s114 float,s115 float,s116 float,s117 float,s118 float,s119 float,s120 float,s121 float,s122 float,s123 float,s124 float,s125 float,s126 float,s127 float,s128 float,s129 float,s130 float,s131 float,s132 float,s133 float,s134 float,s135 float,s136 float,s137 float,s138 float,s139 float,s140 float,s141 float,s142 float,s143 float,s144 float,s145 float,s146 float,s147 float,s148 float,s149 float,s150 float,s151 float,s152 float,s153 float,s154 float,s155 float,s156 float,s157 float,s158 float,s159 float,s160 float,s161 float,s162 float,s163 float,s164 float,s165 float,s166 float,s167 float,s168 float,s169 float,s170 float,s171 float,s172 float,s173 float,s174 float,s175 float,s176 float,s177 float,s178 float,s179 float,s180 float,s181 float,s182 float,s183 float,s184 float,s185 float,s186 float,s187 float,s188 float,s189 float,s190 float,s191 float,s192 float,s193 float,s194 float,s195 float,s196 float,s197 float,s198 float,s199 float,s200 float,s201 float,s202 float,s203 float,s204 float,s205 float,s206 float,s207 float,s208 float,s209 float);";
+    private String longVSchema = "(T bigint, s0 float,s1 float,s2 float,s3 float,s4 float,s5 float,s6 float,s7 float,s8 float,s9 float,s10 float,s11 float,s12 float,s13 float,s14 float,s15 float,s16 float,s17 float,s18 float,s19 float,s20 float,s21 float,s22 float,s23 float,s24 float,s25 float,s26 float,s27 float,s28 float,s29 float,s30 float,s31 float,s32 float,s33 float,s34 float,s35 float,s36 float,s37 float,s38 float,s39 float,s40 float,s41 float,s42 float,s43 float,s44 float,s45 float,s46 float,s47 float,s48 float,s49 float,s50 float,s51 float,s52 float,s53 float,s54 float,s55 float,s56 float,s57 float,s58 float,s59 float,s60 float,s61 float,s62 float,s63 float,s64 float,s65 float,s66 float,s67 float,s68 float,s69 float,s70 float,s71 float,s72 float,s73 float,s74 float,s75 float,s76 float,s77 float,s78 float,s79 float,s80 float,s81 float,s82 float,s83 float,s84 float,s85 float,s86 float,s87 float,s88 float,s89 float,s90 float,s91 float,s92 float,s93 float,s94 float,s95 float,s96 float,s97 float,s98 float,s99 float,s100 float,s101 float,s102 float,s103 float,s104 float,s105 float,s106 float,s107 float,s108 float,s109 float,s110 float,s111 float,s112 float,s113 float,s114 float,s115 float,s116 float,s117 float,s118 float,s119 float,s120 float,s121 float,s122 float,s123 float,s124 float,s125 float,s126 float,s127 float,s128 float,s129 float,s130 float,s131 float,s132 float,s133 float,s134 float,s135 float,s136 float,s137 float,s138 float,s139 float,s140 float,s141 float,s142 float,s143 float,s144 float,s145 float,s146 float,s147 float,s148 float,s149 float,s150 float,s151 float,s152 float,s153 float,s154 float,s155 float,s156 float,s157 float,s158 float,s159 float,s160 float,s161 float,s162 float,s163 float,s164 float,s165 float,s166 float,s167 float,s168 float,s169 float,s170 float,s171 float,s172 float,s173 float,s174 float,s175 float,s176 float,s177 float,s178 float,s179 float,s180 float,s181 float,s182 float,s183 float,s184 float,s185 float,s186 float,s187 float,s188 float,s189 float,s190 float,s191 float,s192 float,s193 float,s194 float,s195 float,s196 float,s197 float,s198 float,s199 float,s200 float,s201 float,s202 float,s203 float,s204 float,s205 float,s206 float,s207 float,s208 float,s209 float, V int);";
+
     public Connection init(int conn) throws SQLException {
         String url = "jdbc:postgresql://localhost:49153/db1";
         Properties props = new Properties();
@@ -22,7 +25,7 @@ public class postgre {
     }
 
     public Connection initTimescale(int conn) throws SQLException {
-        String url = "jdbc:postgresql://localhost:5432/db1";
+        String url = "jdbc:postgresql://localhost:8080/db1";
         //Properties props = new Properties();
         //props.setProperty("user", "postgres");
         //props.setProperty("password", "postgrespw");
@@ -63,6 +66,28 @@ public class postgre {
         return ans;
     }
 
+    public List<Long> loadDupl(Connection connection) throws SQLException, IOException {
+        String pathPrefix = "C:\\Users\\RKMar\\Downloads\\dataset\\dataset\\Ship\\iot.ship.duplnk.0.";
+        //String[] load = {};
+        List<Long> ans = new ArrayList<>();
+        for(int i=10;i<=10;i++) {
+            //File f = new File(pathPrefix + i + ".csv");
+            String fileLoc = pathPrefix + i + ".csv";
+            long curr = System.currentTimeMillis();
+            //File f_upd = new File(pathPrefix + i + "-upd.csv");
+            Statement st = connection.createStatement();
+            String tableName = "shipnk"+i;
+            st.executeUpdate("create table " + tableName + longSchema);
+            long rowsInserted = new CopyManager((BaseConnection) connection)
+                    .copyIn("copy " + tableName + " from STDIN with (format csv);",
+                            new BufferedReader(new FileReader(fileLoc)));
+            ans.add(System.currentTimeMillis() - curr);
+            System.out.println(System.currentTimeMillis() - curr);
+        }
+        persistAns(ans, "Import.duplicate.txt");
+        return ans;
+    }
+
     public List<Long> loadScalabilityVersion(Connection connection) throws SQLException, IOException {
         String pathPrefix = "./dataset/climate_sc/t_70rat=0.";
         //String[] load = {};
@@ -96,7 +121,8 @@ public class postgre {
 
     public void loadAnother(String path, String tableName, Connection connection) throws SQLException, IOException {
         Statement st = connection.createStatement();
-        st.executeUpdate("create table " + tableName + "(T bigint, A float, primary key(T));");
+        //st.executeUpdate("create table " + tableName + "(T bigint, A float, primary key(T));");
+        st.executeUpdate("create table " + tableName + longSchema);
         long rowsInserted = new CopyManager((BaseConnection) connection)
                 .copyIn("copy " + tableName + " from STDIN with (format csv);",
                         new BufferedReader(new FileReader(path)));
@@ -104,7 +130,8 @@ public class postgre {
 
     public void loadAnotherVer(String path, String tableName, Connection connection) throws SQLException, IOException {
         Statement st = connection.createStatement();
-        st.executeUpdate("create table " + tableName + "(T bigint, V int, A float);");
+        //st.executeUpdate("create table " + tableName + "(T bigint, V int, A float);");
+        st.executeUpdate("create table " + tableName + longVSchema);
         long rowsInserted = new CopyManager((BaseConnection) connection)
                 .copyIn("copy " + tableName + " from STDIN with (format csv);",
                         new BufferedReader(new FileReader(path)));
@@ -412,10 +439,11 @@ public class postgre {
         //pg.loadingTimeCompare(conn);
         //pg.loadSufficientData(conn);
         //pg.createMaxViewVersion(conn);
+        pg.loadDupl(conn);
 
         // query performance test
         // remember to restart psql to clear sql cache.
-        pg.performanceQ5Align2SerOriginalScala(conn);
+        //pg.performanceQ5Align2SerOriginalScala(conn);
         //pg.persistAns(ans, "./result/rel_perform_Q1_original_scala4.txt");
         //List<Long> ans = pg.performanceQ1Align2SerVersion(conn);
         //pg.persistAns(ans, "./result/relts_perform_Q1_version_scala1.txt");
