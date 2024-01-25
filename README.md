@@ -165,4 +165,4 @@ To see details, we show benchmark queries in
 
 The related services are {Constants, SchemaDescriptor, Schema} and their references
 
-Due to anonymous issue, commits to IoTDB for a new engine will be shown later.
+IoTDB has adopted and integrated filter parts of System implementation, see IoTDB-core/tsfile/src.main.java/read/expression, other parts beta and under discussing. 
