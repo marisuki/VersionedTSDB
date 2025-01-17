@@ -1,7 +1,7 @@
-*.csv
-*.txt
+# *.csv
+# *.txt
 *.log
 *.class
-/data/*
+# /data/*
 /target/*
 
